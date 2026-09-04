@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Dark, unobtrusive scrollbars so dense lists don't get a bright gutter. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #33443b transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #2c3a33;
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #3a4d43;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
