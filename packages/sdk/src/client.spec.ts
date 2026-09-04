@@ -1,27 +1,30 @@
-import { NodeMonitorClient } from './client';
+import { AMonitorClient } from './client';
 
 jest.mock('./transport');
 import { Transport } from './transport';
 
 const MockedTransport = Transport as jest.MockedClass<typeof Transport>;
 
-describe('NodeMonitorClient', () => {
+describe('AMonitorClient', () => {
   beforeEach(() => {
     MockedTransport.mockClear();
   });
 
-  function createClient(options: Partial<ConstructorParameters<typeof NodeMonitorClient>[0]> = {}) {
-    return new NodeMonitorClient({
-      dsn: 'nm_test',
+  function createClient(options: Partial<ConstructorParameters<typeof AMonitorClient>[0]> = {}) {
+    return new AMonitorClient({
+      dsn: 'am_test',
       apiUrl: 'http://localhost:3001',
       autoCaptureExceptions: false,
+      // Off by default here so capture tests don't also start a background
+      // reporting timer; the metrics behaviour has its own tests below.
+      reportMetrics: false,
       ...options,
     });
   }
 
   it('throws if dsn or apiUrl is missing', () => {
-    expect(() => new NodeMonitorClient({ dsn: '', apiUrl: 'http://x' } as any)).toThrow('dsn');
-    expect(() => new NodeMonitorClient({ dsn: 'x', apiUrl: '' } as any)).toThrow('apiUrl');
+    expect(() => new AMonitorClient({ dsn: '', apiUrl: 'http://x' } as any)).toThrow('dsn');
+    expect(() => new AMonitorClient({ dsn: 'x', apiUrl: '' } as any)).toThrow('apiUrl');
   });
 
   it('reports an Error with its type, message and stack', async () => {

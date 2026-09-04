@@ -2,6 +2,6 @@
   "name": "example-app",
   "private": true,
   "version": "0.1.0",
-  "description": "Demo app that reports errors to node-monitor via the amonitor SDK",
+  "description": "Demo app that reports errors to amonitor via the amonitor SDK",
   "main": "server.js"
 }

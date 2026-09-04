@@ -91,3 +91,11 @@ export const PlusIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="M12 5v14M5 12h14" />
   </Icon>
 );
+
+export const NodesIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <rect x="3" y="3" width="18" height="7" rx="2" />
+    <rect x="3" y="14" width="18" height="7" rx="2" />
+    <path d="M7 6.5h.01M7 17.5h.01" />
+  </Icon>
+);

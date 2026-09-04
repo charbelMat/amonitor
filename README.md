@@ -1,4 +1,4 @@
-# node-monitor
+# amonitor
 
 A self-hosted platform for Node.js: error/issue tracking,
 performance tracing, uptime monitoring and alerting, built with clean
@@ -35,7 +35,7 @@ Self-signup is disabled — accounts are provisioned by a platform admin.
 A fixed default admin is seeded on first boot if it doesn't already exist:
 
 ```
-admin@node-monitor.local / ChangeMe123!
+admin@amonitor.local / ChangeMe123!
 ```
 
 You're forced to change this password on first login. From the dashboard
@@ -50,7 +50,7 @@ owner.
 
 Try it end-to-end:
 1. Log in as the default admin above, set a new password when prompted, then create a project (via "+ New org" then "+ New project") to get a DSN key.
-2. `npm run sdk:build`, then `NODE_MONITOR_DSN=<your key> npm run example` to run the demo app.
+2. `npm run sdk:build`, then `AMONITOR_DSN=<your key> npm run example` to run the demo app.
 3. Hit `http://localhost:3000/boom` (uncaught exception), `/report` (manual capture), or `/slow` (traced transaction + span) and watch it show up under that project in the dashboard.
 4. From the project's "Uptime" page, add a monitor; from "Alerts", add a webhook or email rule for `uptime_down` or `issue_created`.
 

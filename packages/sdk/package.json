@@ -1,7 +1,7 @@
 {
   "name": "amonitor",
-  "version": "0.1.0",
-  "description": "Error tracking and performance tracing client for Node.js — reports uncaught exceptions, breadcrumbs and request traces to a node-monitor instance",
+  "version": "0.1.1",
+  "description": "Error tracking and performance tracing client for Node.js — reports uncaught exceptions, breadcrumbs and request traces to an amonitor instance",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {

@@ -1,17 +1,17 @@
 {
-  "name": "node-monitor-workspace",
+  "name": "amonitor-workspace",
   "private": true,
   "version": "0.1.0",
-  "description": "node-monitor: error tracking, performance, uptime and alerting platform for Node.js",
+  "description": "amonitor: error tracking, performance, uptime and alerting platform for Node.js",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "api:dev": "npm run start:dev --workspace=@node-monitor/api",
-    "dashboard:dev": "npm run dev --workspace=@node-monitor/dashboard",
+    "api:dev": "npm run start:dev --workspace=@amonitor/api",
+    "dashboard:dev": "npm run dev --workspace=@amonitor/dashboard",
     "sdk:build": "npm run build --workspace=amonitor",
     "example": "node examples/express-app/server.js",
-    "test": "npm run test --workspace=@node-monitor/api && npm run test --workspace=@node-monitor/dashboard && npm run test --workspace=amonitor",
+    "test": "npm run test --workspace=@amonitor/api && npm run test --workspace=@amonitor/dashboard && npm run test --workspace=amonitor",
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down"
   }

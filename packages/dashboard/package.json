@@ -1,8 +1,8 @@
 {
-  "name": "@node-monitor/dashboard",
+  "name": "@amonitor/dashboard",
   "version": "0.1.0",
   "private": true,
-  "description": "node-monitor web dashboard (React + Redux Toolkit + Tailwind)",
+  "description": "amonitor web dashboard (React + Redux Toolkit + Tailwind)",
   "type": "module",
   "scripts": {
     "dev": "vite",

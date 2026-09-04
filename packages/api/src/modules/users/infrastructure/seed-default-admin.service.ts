@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger, OnApplicationBootstrap } from '@nestjs/comm
 import { USER_REPOSITORY, UserRepository } from '../domain/user-repository.port';
 import { PASSWORD_HASHER, PasswordHasher } from '../application/password-hasher.port';
 
-export const DEFAULT_ADMIN_EMAIL = 'admin@node-monitor.local';
+export const DEFAULT_ADMIN_EMAIL = 'admin@amonitor.local';
 export const DEFAULT_ADMIN_PASSWORD = 'ChangeMe123!';
 
 /**

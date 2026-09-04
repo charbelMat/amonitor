@@ -2,9 +2,9 @@ FROM node:20-alpine AS build
 WORKDIR /repo
 COPY package.json package-lock.json ./
 COPY packages/api/package.json packages/api/package.json
-RUN npm ci --workspace=@node-monitor/api --include-workspace-root
+RUN npm ci --workspace=@amonitor/api --include-workspace-root
 COPY packages/api packages/api
-RUN npm run build --workspace=@node-monitor/api
+RUN npm run build --workspace=@amonitor/api
 
 FROM node:20-alpine
 WORKDIR /app

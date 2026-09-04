@@ -37,14 +37,14 @@ describe('RotateProjectKeyUseCase', () => {
       organizationId: randomUUID(),
       name: 'My project',
       slug: 'my-project',
-      dsnKey: 'nm_original',
+      dsnKey: 'am_original',
     });
     const useCase = new RotateProjectKeyUseCase(repo);
 
     const updated = await useCase.execute(project.id);
 
-    expect(updated.dsnKey).not.toBe('nm_original');
-    expect(updated.dsnKey).toMatch(/^nm_[a-f0-9]{32}$/);
+    expect(updated.dsnKey).not.toBe('am_original');
+    expect(updated.dsnKey).toMatch(/^am_[a-f0-9]{32}$/);
   });
 
   it('throws NotFoundException for an unknown project id', async () => {

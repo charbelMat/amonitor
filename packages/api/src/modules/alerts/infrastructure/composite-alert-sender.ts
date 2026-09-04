@@ -13,7 +13,7 @@ export class CompositeAlertSender implements AlertSender {
 
   constructor(private readonly config: ConfigService) {
     const smtpHost = config.get<string>('SMTP_HOST');
-    this.mailFrom = config.get<string>('ALERT_EMAIL_FROM', 'alerts@node-monitor.local');
+    this.mailFrom = config.get<string>('ALERT_EMAIL_FROM', 'alerts@amonitor.local');
 
     this.mailer = smtpHost
       ? nodemailer.createTransport({

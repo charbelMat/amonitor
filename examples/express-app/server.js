@@ -1,16 +1,16 @@
 'use strict';
 
 const http = require('http');
-const { NodeMonitor } = require('../../packages/sdk/dist');
+const { AMonitor } = require('../../packages/sdk/dist');
 
-NodeMonitor.init({
-  dsn: process.env.NODE_MONITOR_DSN || 'REPLACE_WITH_YOUR_PROJECT_DSN_KEY',
-  apiUrl: process.env.NODE_MONITOR_URL || 'http://localhost:3001',
+AMonitor.init({
+  dsn: process.env.AMONITOR_DSN || 'REPLACE_WITH_YOUR_PROJECT_DSN_KEY',
+  apiUrl: process.env.AMONITOR_URL || 'http://localhost:3001',
   environment: 'development',
 });
 
 const server = http.createServer((req, res) => {
-  NodeMonitor.addBreadcrumb({ category: 'http', message: `${req.method} ${req.url}`, level: 'info' });
+  AMonitor.addBreadcrumb({ category: 'http', message: `${req.method} ${req.url}`, level: 'info' });
 
   if (req.url === '/boom') {
     // Deliberately throws to demonstrate automatic exception capture.
@@ -19,7 +19,7 @@ const server = http.createServer((req, res) => {
   }
 
   if (req.url === '/report') {
-    NodeMonitor.captureException(new Error('Manually reported error')).then(() => {
+    AMonitor.captureException(new Error('Manually reported error')).then(() => {
       res.end('reported\n');
     });
     return;
@@ -27,7 +27,7 @@ const server = http.createServer((req, res) => {
 
   if (req.url === '/slow') {
     // Demonstrates performance tracing: a transaction with one child span.
-    const transaction = NodeMonitor.startTransaction('GET /slow', 'http.server');
+    const transaction = AMonitor.startTransaction('GET /slow', 'http.server');
     const dbSpan = transaction.startChild('db.query', 'SELECT * FROM orders');
     setTimeout(() => {
       dbSpan.finish();

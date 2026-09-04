@@ -32,7 +32,7 @@ export class RunUptimeCheckUseCase {
       await this.evaluateAlerts.execute({
         projectId: monitor.projectId,
         trigger: 'uptime_down',
-        subject: `[node-monitor] ${monitor.name} is down`,
+        subject: `[amonitor] ${monitor.name} is down`,
         message: `${monitor.name} (${monitor.url}) returned status ${statusCode}, expected ${monitor.expectedStatus}.`,
       });
     }

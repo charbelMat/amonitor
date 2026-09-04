@@ -2,19 +2,20 @@
 
 ## Packages
 
-- `packages/sdk` — Node.js client library (published to npm as `amonitor`). Captures uncaught exceptions, unhandled rejections, manually reported errors/messages (with breadcrumbs), and performance transactions/spans, and ships them to the API's ingest endpoint.
+- `packages/sdk` — Node.js client library (published to npm as `amonitor`). Captures uncaught exceptions, unhandled rejections, manually reported errors/messages (with breadcrumbs), performance transactions/spans, and periodic node health samples (CPU/memory/network/event-loop lag), and ships them to the API's ingest endpoint.
 - `packages/api` — NestJS backend. REST API, multi-tenant data model, ingestion pipeline, alerting.
 - `packages/dashboard` — React + Redux Toolkit + Tailwind web UI.
 
 ## Backend modules
 
-- `users` — user persistence and password hashing (bcrypt). No auth-session logic. Split out from `auth` and holding `PasswordHasher` specifically to avoid circular dependencies: `auth` needs `organizations`, `organizations` needs user lookup, and `admin` needs both user persistence and hashing — all three depend on `users` instead of on each other. Also owns `SeedDefaultAdminService`, which creates a fixed `admin@node-monitor.local` account with `isAdmin: true, mustChangePassword: true` on boot if it doesn't already exist (self-signup is disabled, so a fresh instance would otherwise have no way to log in at all).
+- `users` — user persistence and password hashing (bcrypt). No auth-session logic. Split out from `auth` and holding `PasswordHasher` specifically to avoid circular dependencies: `auth` needs `organizations`, `organizations` needs user lookup, and `admin` needs both user persistence and hashing — all three depend on `users` instead of on each other. Also owns `SeedDefaultAdminService`, which creates a fixed `admin@amonitor.local` account with `isAdmin: true, mustChangePassword: true` on boot if it doesn't already exist (self-signup is disabled, so a fresh instance would otherwise have no way to log in at all).
 - `auth` — login/refresh/logout/change-password, JWT (access token returned in the response body and carrying `isAdmin`/`mustChangePassword` so guards and the frontend don't need a DB round-trip; refresh token as an httpOnly cookie). There is no signup endpoint — see `admin`.
 - `admin` — platform-wide user management, gated by `AdminGuard` (checks `isAdmin` on the JWT). `CreateUserUseCase` is the only way a new account gets created now that self-signup is gone; it deliberately does *not* create an organization for the new user (unlike the old signup flow) — they create their own via the existing `POST /organizations`, or an org owner adds them by email. Also: list all users, delete a user (blocks self-delete), reset a user's password (sets `mustChangePassword: true`). `isAdmin` is a flag on the user account, independent of any organization's owner/admin/member roles — it grants access to this module, not to other people's orgs.
 - `organizations` — orgs, owner/admin/member membership, the `OrganizationMembershipGuard` reused by every project-scoped controller.
 - `projects` — project CRUD scoped to an org, DSN key issuance/rotation.
 - `issues` — error grouping. Ingested exceptions are fingerprinted (exception type + top stack frame) and grouped into Postgres `issues` rows; raw events (stack trace, breadcrumbs) live in ClickHouse.
 - `performance` — transactions/spans, stored in ClickHouse only (no Postgres row — there's no mutable state or grouping workflow like issues have).
+- `nodes` — per-instance host health (CPU, memory, network, event-loop lag) in ClickHouse. Each process running the SDK reports itself as a node every ~15s, so one project spread across several machines/pods shows up as several nodes. Status is derived from sample age rather than stored (online ≤2 intervals, stale ≤4, offline beyond), and live rollups exclude offline nodes so a dead instance's last numbers don't skew the averages.
 - `uptime` — uptime monitors (Postgres) and checks (ClickHouse). Each monitor gets its own dynamically scheduled interval via `@nestjs/schedule`'s `SchedulerRegistry`, registered/unregistered as monitors are created/deleted and restored on boot.
 - `alerts` — alert rules (Postgres) matching on a trigger (`issue_created`, `uptime_down`), delivered via email or webhook through a BullMQ worker. `EvaluateAlertsUseCase` is the single entry point other modules call when something alert-worthy happens; `issues` and `uptime` both import `AlertsModule` to call it, but `AlertsModule` imports neither, so there's no cycle.
 - `ingest` — the public, DSN-key-authenticated endpoints the SDK talks to (`POST /ingest/:projectKey/exception` and `.../transaction`). No JWT — a project's DSN key is the credential here, checked by `ProjectKeyGuard`.
@@ -69,6 +70,26 @@ NestUptimeScheduler (one setInterval per monitor)
                 v
       matching `alert_rules` -> enqueue alert-dispatch -> email / webhook
 ```
+
+## Data flow: node health
+
+```
+SDK MetricsCollector (unref'd timer, every ~15s per process)
+                |
+                v
+     POST /api/ingest/:projectKey/metrics   (DSN key auth, same as errors)
+                |
+                v
+        append sample to ClickHouse `node_metrics`
+                |
+                v
+  Nodes page: latest-per-instance (ClickHouse LIMIT 1 BY) + status from sample age
+  Node detail: history() over a time window -> CPU / memory / network charts
+```
+
+Host network throughput comes from `/proc/net/dev` and is therefore Linux-only;
+elsewhere the sample carries `networkSupported: false` and the UI shows `n/a`
+rather than a misleading zero.
 
 ## Data flow: performance tracing
 

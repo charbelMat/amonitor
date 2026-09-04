@@ -1,29 +1,30 @@
-import { NodeMonitorClient, NodeMonitorOptions } from './client';
+import { AMonitorClient, AMonitorOptions } from './client';
 import { createTracingMiddleware } from './middleware';
 
-export { NodeMonitorClient, NodeMonitorOptions };
+export { AMonitorClient, AMonitorOptions };
 export { Breadcrumb, BreadcrumbLevel } from './breadcrumbs';
 export { Span, Transaction } from './tracing';
+export { MetricsCollector, type MetricsPayload } from './metrics';
 export { createTracingMiddleware };
 
-let currentClient: NodeMonitorClient | null = null;
+let currentClient: AMonitorClient | null = null;
 
-function requireClient(): NodeMonitorClient {
+function requireClient(): AMonitorClient {
   if (!currentClient) {
-    throw new Error('node-monitor: call NodeMonitor.init(options) before using it');
+    throw new Error('amonitor: call AMonitor.init(options) before using it');
   }
   return currentClient;
 }
 
 /**
- * singleton API: `NodeMonitor.init(...)` once at process
+ * singleton API: `AMonitor.init(...)` once at process
  * startup, then `captureException` / `addBreadcrumb` anywhere in the app.
- * For multiple independent clients in one process, use `NodeMonitorClient`
+ * For multiple independent clients in one process, use `AMonitorClient`
  * directly instead.
  */
-export const NodeMonitor = {
-  init(options: NodeMonitorOptions): NodeMonitorClient {
-    currentClient = new NodeMonitorClient(options);
+export const AMonitor = {
+  init(options: AMonitorOptions): AMonitorClient {
+    currentClient = new AMonitorClient(options);
     return currentClient;
   },
   captureException(error: unknown, extra?: { tags?: Record<string, string> }) {
@@ -32,7 +33,7 @@ export const NodeMonitor = {
   captureMessage(message: string, level?: 'error' | 'warning' | 'info') {
     return requireClient().captureMessage(message, level);
   },
-  addBreadcrumb(breadcrumb: Parameters<NodeMonitorClient['addBreadcrumb']>[0]) {
+  addBreadcrumb(breadcrumb: Parameters<AMonitorClient['addBreadcrumb']>[0]) {
     return requireClient().addBreadcrumb(breadcrumb);
   },
   startTransaction(name: string, op?: string) {
@@ -41,5 +42,9 @@ export const NodeMonitor = {
   /** Express/Connect middleware that wraps each request in a transaction. */
   tracingMiddleware() {
     return createTracingMiddleware(requireClient());
+  },
+  /** Stops background node health reporting for the singleton client. */
+  stopMetrics() {
+    return requireClient().stopMetrics();
   },
 };

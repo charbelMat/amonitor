@@ -12,6 +12,8 @@ import { IssueDetailPage } from './pages/IssueDetailPage';
 import { PerformancePage } from './pages/PerformancePage';
 import { TraceDetailPage } from './pages/TraceDetailPage';
 import { UptimePage } from './pages/UptimePage';
+import { NodesPage } from './pages/NodesPage';
+import { NodeDetailPage } from './pages/NodeDetailPage';
 import { AlertsPage } from './pages/AlertsPage';
 import { ProjectsSettingsPage } from './pages/ProjectsSettingsPage';
 import { AdminUsersPage } from './pages/AdminUsersPage';
@@ -73,6 +75,22 @@ export function App() {
             element={
               <Protected>
                 <TraceDetailPage />
+              </Protected>
+            }
+          />
+          <Route
+            path="/nodes"
+            element={
+              <Protected>
+                <NodesPage />
+              </Protected>
+            }
+          />
+          <Route
+            path="/nodes/:instanceId"
+            element={
+              <Protected>
+                <NodeDetailPage />
               </Protected>
             }
           />

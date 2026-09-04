@@ -19,6 +19,30 @@ const CREATE_EVENTS_TABLE = `
   ORDER BY (project_id, issue_id, timestamp)
 `;
 
+const CREATE_NODE_METRICS_TABLE = `
+  CREATE TABLE IF NOT EXISTS node_metrics (
+    project_id String,
+    instance_id String,
+    hostname String,
+    pid Int32,
+    timestamp DateTime64(3),
+    uptime_sec Int64,
+    cpu_percent Float64,
+    cpu_count Int32,
+    load_avg_1 Float64,
+    mem_rss_bytes Int64,
+    mem_heap_used_bytes Int64,
+    mem_heap_total_bytes Int64,
+    system_mem_total_bytes Int64,
+    system_mem_free_bytes Int64,
+    network_supported UInt8,
+    net_rx_bytes_per_sec Int64,
+    net_tx_bytes_per_sec Int64,
+    event_loop_lag_ms Float64
+  ) ENGINE = MergeTree
+  ORDER BY (project_id, instance_id, timestamp)
+`;
+
 const CREATE_UPTIME_CHECKS_TABLE = `
   CREATE TABLE IF NOT EXISTS uptime_checks (
     id String,
@@ -61,6 +85,7 @@ export class ClickHouseService implements OnModuleInit {
     await this.client.command({ query: CREATE_EVENTS_TABLE });
     await this.client.command({ query: CREATE_SPANS_TABLE });
     await this.client.command({ query: CREATE_UPTIME_CHECKS_TABLE });
+    await this.client.command({ query: CREATE_NODE_METRICS_TABLE });
   }
 
   async insert(table: string, rows: Record<string, unknown>[]): Promise<void> {

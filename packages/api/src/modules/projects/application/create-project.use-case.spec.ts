@@ -38,7 +38,7 @@ describe('CreateProjectUseCase', () => {
     const project = await useCase.execute({ organizationId: orgId, name: 'My API' });
 
     expect(project.slug).toBe('my-api');
-    expect(project.dsnKey).toMatch(/^nm_[a-f0-9]{32}$/);
+    expect(project.dsnKey).toMatch(/^am_[a-f0-9]{32}$/);
   });
 
   it('disambiguates slugs that collide within the same organization', async () => {

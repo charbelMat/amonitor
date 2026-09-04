@@ -40,7 +40,7 @@ describe('ProjectsController.rotateKey', () => {
       organizationId: victimOrgId,
       name: 'Victim project',
       slug: 'victim',
-      dsnKey: 'nm_original',
+      dsnKey: 'am_original',
     });
 
     const rotateProjectKey = new RotateProjectKeyUseCase(repo);
@@ -55,7 +55,7 @@ describe('ProjectsController.rotateKey', () => {
       NotFoundException,
     );
     // The key must be untouched — the rejection has to happen before rotation.
-    expect((await repo.findById(victimProject.id))!.dsnKey).toBe('nm_original');
+    expect((await repo.findById(victimProject.id))!.dsnKey).toBe('am_original');
   });
 
   it('allows rotating a project that does belong to the organization in the URL', async () => {
@@ -65,7 +65,7 @@ describe('ProjectsController.rotateKey', () => {
       organizationId: orgId,
       name: 'My project',
       slug: 'my-project',
-      dsnKey: 'nm_original',
+      dsnKey: 'am_original',
     });
 
     const rotateProjectKey = new RotateProjectKeyUseCase(repo);
@@ -77,6 +77,6 @@ describe('ProjectsController.rotateKey', () => {
     );
 
     const result = await controller.rotateKey(orgId, project.id);
-    expect(result.dsnKey).not.toBe('nm_original');
+    expect(result.dsnKey).not.toBe('am_original');
   });
 });

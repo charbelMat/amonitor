@@ -36,7 +36,7 @@ export class GroupEventIntoIssueUseCase {
       await this.evaluateAlerts.execute({
         projectId: input.projectId,
         trigger: 'issue_created',
-        subject: `[node-monitor] New issue: ${issue.title}`,
+        subject: `[amonitor] New issue: ${issue.title}`,
         message: `A new issue was reported: ${issue.title}`,
       });
       return issue;

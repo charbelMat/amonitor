@@ -2,6 +2,7 @@ import http from 'node:http';
 import https from 'node:https';
 import { URL } from 'node:url';
 import { TransactionPayload } from './tracing';
+import { MetricsPayload } from './metrics';
 
 export interface ExceptionPayload {
   timestamp: number;
@@ -27,6 +28,10 @@ export class Transport {
 
   sendTransaction(payload: TransactionPayload): Promise<void> {
     return this.post(`/api/ingest/${encodeURIComponent(this.dsn)}/transaction`, payload);
+  }
+
+  sendMetrics(payload: MetricsPayload): Promise<void> {
+    return this.post(`/api/ingest/${encodeURIComponent(this.dsn)}/metrics`, payload);
   }
 
   private post(path: string, body: unknown): Promise<void> {
@@ -58,7 +63,7 @@ export class Transport {
         },
       );
 
-      req.on('timeout', () => req.destroy(new Error('node-monitor: request timed out')));
+      req.on('timeout', () => req.destroy(new Error('amonitor: request timed out')));
       req.on('error', reject);
       req.write(data);
       req.end();

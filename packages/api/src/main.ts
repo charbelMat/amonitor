@@ -12,7 +12,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
   const config = new DocumentBuilder()
-    .setTitle('node-monitor API')
+    .setTitle('amonitor API')
     .setDescription('Error tracking, performance, uptime and alerting API')
     .setVersion('0.1')
     .addBearerAuth()
@@ -23,7 +23,7 @@ async function bootstrap() {
   const port = process.env.PORT || 3001;
   await app.listen(port);
   // eslint-disable-next-line no-console
-  console.log(`node-monitor API listening on http://localhost:${port} (docs at /docs)`);
+  console.log(`amonitor API listening on http://localhost:${port} (docs at /docs)`);
 }
 
 bootstrap();

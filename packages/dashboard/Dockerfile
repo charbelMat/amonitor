@@ -2,9 +2,9 @@ FROM node:20-alpine AS build
 WORKDIR /repo
 COPY package.json package-lock.json ./
 COPY packages/dashboard/package.json packages/dashboard/package.json
-RUN npm ci --workspace=@node-monitor/dashboard --include-workspace-root
+RUN npm ci --workspace=@amonitor/dashboard --include-workspace-root
 COPY packages/dashboard packages/dashboard
-RUN npm run build --workspace=@node-monitor/dashboard
+RUN npm run build --workspace=@amonitor/dashboard
 
 FROM nginx:1.27-alpine
 COPY --from=build /repo/packages/dashboard/dist /usr/share/nginx/html

@@ -78,7 +78,7 @@ export function UptimePage() {
       {!isLoading && monitors?.length === 0 && (
         <EmptyState
           title="No monitors yet"
-          description="Add a URL and node-monitor will check it on an interval, and alert you when it stops returning the status you expect."
+          description="Add a URL and amonitor will check it on an interval, and alert you when it stops returning the status you expect."
           action={
             <Button size="md" variant="primary" onClick={() => setShowCreate(true)}>
               Add your first monitor

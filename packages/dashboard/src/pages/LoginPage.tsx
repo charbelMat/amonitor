@@ -28,7 +28,7 @@ export function LoginPage() {
           <span className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center text-white text-sm font-bold">
             n
           </span>
-          <span className="text-lg font-semibold tracking-tight">node-monitor</span>
+          <span className="text-lg font-semibold tracking-tight">amonitor</span>
         </div>
 
         <Card className="p-6">

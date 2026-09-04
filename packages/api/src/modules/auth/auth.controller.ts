@@ -14,7 +14,7 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { RequestUser } from './infrastructure/jwt.strategy';
 import { USER_REPOSITORY, UserRepository } from '../users/domain/user-repository.port';
 
-const REFRESH_COOKIE_NAME = 'nm_refresh';
+const REFRESH_COOKIE_NAME = 'am_refresh';
 
 @ApiTags('auth')
 @Controller('auth')

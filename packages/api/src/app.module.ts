@@ -12,6 +12,7 @@ import { AlertsModule } from './modules/alerts/alerts.module';
 import { IssuesModule } from './modules/issues/issues.module';
 import { PerformanceModule } from './modules/performance/performance.module';
 import { UptimeModule } from './modules/uptime/uptime.module';
+import { NodesModule } from './modules/nodes/nodes.module';
 import { IngestModule } from './modules/ingest/ingest.module';
 
 @Module({
@@ -29,6 +30,7 @@ import { IngestModule } from './modules/ingest/ingest.module';
     IssuesModule,
     PerformanceModule,
     UptimeModule,
+    NodesModule,
     IngestModule,
   ],
 })

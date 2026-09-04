@@ -16,11 +16,13 @@ import {
   SettingsIcon,
   UptimeIcon,
   UsersIcon,
+  NodesIcon,
 } from '../components/icons';
 
 const NAV_ITEMS = [
   { to: '/issues', label: 'Issues', Icon: IssuesIcon },
   { to: '/performance', label: 'Performance', Icon: PerformanceIcon },
+  { to: '/nodes', label: 'Nodes', Icon: NodesIcon },
   { to: '/uptime', label: 'Uptime', Icon: UptimeIcon },
   { to: '/alerts', label: 'Alerts', Icon: AlertsIcon },
 ];
@@ -55,7 +57,7 @@ export function Sidebar() {
           <span className="w-6 h-6 rounded bg-accent flex items-center justify-center text-white text-xs font-bold">
             n
           </span>
-          <span className="text-sm font-semibold tracking-tight">node-monitor</span>
+          <span className="text-sm font-semibold tracking-tight">amonitor</span>
         </div>
 
         <select
